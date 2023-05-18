@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer List</title>
+	<style>
+        .desc {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+	<script>
+        var currentUrl = new URL(window.location.href);
+
+        // Get the 'desc' parameter from the URL
+        var descParam = currentUrl.searchParams.get("desc");
+
+        // If the 'desc' parameter exists and is equal to 'true', add the 'desc' class to the corresponding column header
+        if (descParam && descParam === "true") {
+            var sortParam = currentUrl.searchParams.get("sort");
+            var columnHeader = document.querySelector('th a[href="/?sort=' + sortParam + '&desc=' + descParam + '"]');
+            if (columnHeader) {
+                columnHeader.classList.add("desc");
+            }
+        }
+
+        // Function to toggle the 'desc' parameter and reload the page with the updated URL
+        function toggleSort(column) {
+            var sortParam = currentUrl.searchParams.get("sort");
+            var descParam = currentUrl.searchParams.get("desc");
+            var newDescParam;
+
+            if (descParam && descParam === "true") {
+                newDescParam = "false";
+            } else {
+                newDescParam = "true";
+            }
+
+            var newUrl = "/?sort=" + column + "&desc=" + newDescParam;
+            window.location.href = newUrl;
+        }
+    </script>
+    <a href="/create">Create new customer</a>
+    <h1>Customer List</h1>
+    <form action="/" method="GET">
+        <input type="text" name="search" placeholder="Search by First Name or Last Name">
+		<div class="hide">You can search customer by firstname and lastname only</div>
+        <input type="submit" value="Search">
+    </form>
+    <table>
+        <tr>
+			<th><a href="javascript:toggleSort('FirstName')">First Name</a></th>
+            <th><a href="javascript:toggleSort('LastName')">Last Name</a></th>
+            <th><a href="javascript:toggleSort('BirthDate')">Birth Date</a></th>
+            <th><a href="javascript:toggleSort('Gender')">Gender</a></th>
+            <th><a href="javascript:toggleSort('Email')">Email</a></th>
+            <th><a href="javascript:toggleSort('Address')">Address</a></th>
+			<th>Edit</th> 
+        </tr>
+        {{ range .customers }}
+        <tr>
+            <td>{{ .FirstName }}</td>
+            <td>{{ .LastName }}</td>
+            <td>{{ .BirthDate }}</td>
+            <td>{{ .Gender }}</td>
+            <td>{{ .Email }}</td>
+            <td>{{ .Address }}</td>
+            <td><a href="/edit/{{ .ID }}">Edit</a></td>
+        </tr>
+        {{ end }}
+    </table>
+</body>
+</html>

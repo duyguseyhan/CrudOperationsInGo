@@ -1,0 +1,3 @@
+th a.desc::after {
+    content: " ▼";
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Customer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#createCustomerForm").submit(function (event) {
+                event.preventDefault();
+                var formData = {
+                    firstName: $("#firstName").val(),
+                    lastName: $("#lastName").val(),
+                    birthDate: $("#birthDate").val(),
+                    gender: $("#gender").val(),
+                    email: $("#email").val(),
+                    address: $("#address").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/create",
+                    data: JSON.stringify(formData),
+                    contentType: "application/json",
+                    success: function () {
+                        alert("Customer created successfully");
+                        window.location.href = "/";
+                    },
+                    error: function () {
+                        alert("Error creating customer");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Create Customer</h1>
+<form id="createCustomerForm">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" required maxlength="100">
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" required maxlength="100">
+
+    <label for="birthDate">Birth Date:</label>
+    <input type="date" id="birthDate" name="BirthDate" required placeholder="YYYY-MM-DD">
+
+    <label for="gender">Gender:</label>
+    <select id="gender" required>
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+
+    <label for="address">Address:</label>
+    <textarea id="address" maxlength="200"></textarea>
+
+    <input type="submit" value="Create">
+</form>
+</body>
+</html>
