@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	c "github.com/duyguseyhan/crudoperationsingo/controllers"
 	m "github.com/duyguseyhan/crudoperationsingo/models"
 	r "github.com/duyguseyhan/crudoperationsingo/repositories"
 	s "github.com/duyguseyhan/crudoperationsingo/services"
@@ -22,7 +23,7 @@ func main() {
 
 	customerRepo := r.NewCustomerRepository(db)
 	customerService := s.NewCustomerService(customerRepo)
-	customerController := NewCustomerController(customerService)
+	customerController := c.NewCustomerController(customerService)
 
 	r := gin.Default()
 	r.LoadHTMLGlob("templates/*.html")
