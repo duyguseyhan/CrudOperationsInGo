@@ -1,5 +1,3 @@
-// validator.go
-
 package main
 
 import (
@@ -7,9 +5,11 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	m "github.com/duyguseyhan/crudoperationsingo/models"
 )
 
-func validateCustomer(customer Customer) error {
+func validateCustomer(customer m.Customer) error {
 	if strings.TrimSpace(customer.FirstName) == "" {
 		return errors.New("first name is required")
 	}

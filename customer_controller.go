@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 
+	m "github.com/duyguseyhan/crudoperationsingo/models"
+	s "github.com/duyguseyhan/crudoperationsingo/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,10 +17,10 @@ type CustomerController interface {
 }
 
 type customerController struct {
-	service CustomerService
+	service s.CustomerService
 }
 
-func NewCustomerController(service CustomerService) CustomerController {
+func NewCustomerController(service s.CustomerService) CustomerController {
 	return &customerController{
 		service: service,
 	}
@@ -28,7 +30,7 @@ func (c *customerController) GetCustomers(ctx *gin.Context) {
 	searchQuery := ctx.Query("search")
 	sortColumn := ctx.Query("sort")
 	descending := ctx.Query("desc") == "true"
-	var customers []Customer
+	var customers []m.Customer
 	var err error
 
 	if searchQuery != "" {
@@ -50,7 +52,7 @@ func (c *customerController) GetCustomers(ctx *gin.Context) {
 }
 
 func (c *customerController) CreateCustomer(ctx *gin.Context) {
-	var customer Customer
+	var customer m.Customer
 	if err := ctx.ShouldBindJSON(&customer); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -70,7 +72,7 @@ func (c *customerController) CreateCustomer(ctx *gin.Context) {
 func (c *customerController) UpdateCustomer(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	var customer Customer
+	var customer m.Customer
 	if err := ctx.ShouldBindJSON(&customer); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

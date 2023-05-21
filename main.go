@@ -3,6 +3,9 @@ package main
 import (
 	"log"
 
+	m "github.com/duyguseyhan/crudoperationsingo/models"
+	r "github.com/duyguseyhan/crudoperationsingo/repositories"
+	s "github.com/duyguseyhan/crudoperationsingo/services"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -17,8 +20,8 @@ func main() {
 
 	performMigration(db)
 
-	customerRepo := NewCustomerRepository(db)
-	customerService := NewCustomerService(customerRepo)
+	customerRepo := r.NewCustomerRepository(db)
+	customerService := s.NewCustomerService(customerRepo)
 	customerController := NewCustomerController(customerService)
 
 	r := gin.Default()
@@ -36,7 +39,7 @@ func main() {
 	}
 }
 func performMigration(db *gorm.DB) {
-	err := db.AutoMigrate(&Customer{})
+	err := db.AutoMigrate(&m.Customer{})
 	if err != nil {
 		log.Fatal(err)
 	}
