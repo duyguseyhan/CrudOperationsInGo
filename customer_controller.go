@@ -55,7 +55,10 @@ func (c *customerController) CreateCustomer(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	if err := validateCustomer(customer); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	if err := c.service.CreateCustomer(customer); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create customer"})
 		return
@@ -72,7 +75,10 @@ func (c *customerController) UpdateCustomer(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+	if err := validateCustomer(customer); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	if err := c.service.UpdateCustomer(id, customer); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update customer"})
 		return

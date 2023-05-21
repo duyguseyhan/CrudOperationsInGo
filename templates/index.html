@@ -61,7 +61,7 @@
         <tr>
             <td>{{ .FirstName }}</td>
             <td>{{ .LastName }}</td>
-            <td>{{ .BirthDate }}</td>
+            <td>{{ .BirthDate.Format "02-01-2006" }}</td>
             <td>{{ .Gender }}</td>
             <td>{{ .Email }}</td>
             <td>{{ .Address }}</td>

@@ -7,16 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Customer struct {
-	ID        int
-	FirstName string
-	LastName  string
-	BirthDate string
-	Gender    string
-	Email     string
-	Address   string
-}
-
 type CustomerRepository interface {
 	GetCustomers() ([]Customer, error)
 	CreateCustomer(customer Customer) error
@@ -42,19 +32,24 @@ func (r *customerRepository) GetCustomers() ([]Customer, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	for i := range customers {
-		birthDate, err := time.Parse("2006-01-02T15:04:05Z", customers[i].BirthDate)
-		if err != nil {
-			return nil, err
-		}
-		customers[i].BirthDate = birthDate.Format("02.01.2006")
-	}
+
 	return customers, nil
 }
 
 func (r *customerRepository) CreateCustomer(customer Customer) error {
+	birthDateString := customer.BirthDate.Format("2006-01-02")
+
+	birthDate, err := time.Parse("2006-01-02", birthDateString)
+	if err != nil {
+		return err
+	}
+	customer.BirthDate = birthDate
+
 	result := r.db.Create(&customer)
-	return result.Error
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
 func (r *customerRepository) UpdateCustomer(id string, customer Customer) error {
@@ -75,8 +70,6 @@ func (r *customerRepository) GetCustomerByID(id string) (*Customer, error) {
 		return nil, result.Error
 	}
 
-	birthDate, _ := time.Parse("2006-01-02T15:04:05Z", customer.BirthDate)
-	customer.BirthDate = birthDate.Format("2006-01-02")
 	return &customer, nil
 }
 
@@ -86,13 +79,7 @@ func (r *customerRepository) SearchCustomers(query string) ([]Customer, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
-	for i := range customers {
-		birthDate, err := time.Parse("2006-01-02T15:04:05Z", customers[i].BirthDate)
-		if err != nil {
-			return nil, err
-		}
-		customers[i].BirthDate = birthDate.Format("02.01.2006")
-	}
+
 	return customers, nil
 }
 
@@ -127,14 +114,6 @@ func (r *customerRepository) SortCustomers(column string, descending bool) ([]Cu
 	result := r.db.Order(order).Find(&customers)
 	if result.Error != nil {
 		return nil, result.Error
-	}
-
-	for i := range customers {
-		birthDate, err := time.Parse("2006-01-02T15:04:05Z", customers[i].BirthDate)
-		if err != nil {
-			return nil, err
-		}
-		customers[i].BirthDate = birthDate.Format("02.01.2006")
 	}
 
 	return customers, nil

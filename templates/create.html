@@ -10,7 +10,7 @@
                 var formData = {
                     firstName: $("#firstName").val(),
                     lastName: $("#lastName").val(),
-                    birthDate: $("#birthDate").val(),
+                    birthDate: formatToRFC3339(),
                     gender: $("#gender").val(),
                     email: $("#email").val(),
                     address: $("#address").val()
@@ -31,6 +31,16 @@
                 });
             });
         });
+
+    function formatToRFC3339() {
+      var birthDateInput = document.getElementById('birthDate');
+      var birthDateValue = birthDateInput.value;
+
+      var birthDate = new Date(birthDateValue);
+      var rfc3339FormattedDate = birthDate.toISOString();
+
+      return rfc3339FormattedDate;
+    }
     </script>
 </head>
 <body>
@@ -43,7 +53,7 @@
     <input type="text" id="lastName" required maxlength="100">
 
     <label for="birthDate">Birth Date:</label>
-    <input type="date" id="birthDate" name="BirthDate" required placeholder="YYYY-MM-DD">
+    <input type="date" id="birthDate" name="BirthDate" required required placeholder="YYYY-MM-DD">>
 
     <label for="gender">Gender:</label>
     <select id="gender" required>

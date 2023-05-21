@@ -1,9 +1,5 @@
 package main
 
-import (
-	"time"
-)
-
 type CustomerService interface {
 	GetCustomers() ([]Customer, error)
 	CreateCustomer(customer Customer) error
@@ -28,20 +24,10 @@ func (s *customerService) GetCustomers() ([]Customer, error) {
 }
 
 func (s *customerService) CreateCustomer(customer Customer) error {
-	if err := validateCustomer(customer); err != nil {
-		return err
-	}
-	birthDate, _ := time.Parse("2006-01-02", customer.BirthDate)
-	customer.BirthDate = birthDate.Format("2006-01-02")
 	return s.repo.CreateCustomer(customer)
 }
 
 func (s *customerService) UpdateCustomer(id string, customer Customer) error {
-	if err := validateCustomer(customer); err != nil {
-		return err
-	}
-	birthDate, _ := time.Parse("2006-01-02", customer.BirthDate)
-	customer.BirthDate = birthDate.Format("2006-01-02")
 	return s.repo.UpdateCustomer(id, customer)
 }
 
